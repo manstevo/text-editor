@@ -38,6 +38,28 @@ def clear_text():
 def save_shortcut(event):
     save_file()
 
+def update_counters(event=None):
+    text = text_area.get(1.0, tk.END)
+    
+    # Word count
+    words = len(text.split())
+    
+    # Character count (including spaces)
+    chars = len(text)
+    
+    # Character count (excluding spaces)
+    chars_no_space = len(text.replace(" ", "").replace("\n", ""))
+    
+    # Line count
+    lines = len(text.splitlines())
+    
+    # Update labels
+    word_count_label.config(text=f"Words: {words}")
+    char_count_label.config(text=f"Characters (with spaces): {chars}")
+    char_no_space_label.config(text=f"Characters (no spaces): {chars_no_space}")
+    line_count_label.config(text=f"Lines: {lines}")
+
+
 root = tk.Tk()
 root.title("Advanced Text Editor")
 root.geometry("800x600")
@@ -46,6 +68,25 @@ root.geometry("800x600")
 text_area = tk.Text(root, wrap=tk.WORD, font=("Arial", 12))
 text_area.pack(expand=True, fill=tk.BOTH)
 
+# Create a frame for counters
+counter_frame = tk.Frame(root)
+counter_frame.pack(fill=tk.X, padx=5, pady=2)
+
+# Create labels for counters
+word_count_label = tk.Label(counter_frame, text="Words: 0")
+word_count_label.pack(side=tk.LEFT, padx=5)
+
+char_count_label = tk.Label(counter_frame, text="Characters (with spaces): 0")
+char_count_label.pack(side=tk.LEFT, padx=5)
+
+char_no_space_label = tk.Label(counter_frame, text="Characters (no spaces): 0")
+char_no_space_label.pack(side=tk.LEFT, padx=5)
+
+line_count_label = tk.Label(counter_frame, text="Lines: 0")
+line_count_label.pack(side=tk.LEFT, padx=5)
+
+# Bind the update_counters function to text changes
+text_area.bind('<KeyRelease>', update_counters)
 
 menu_bar = tk.Menu(root)
 root.config(menu=menu_bar)
